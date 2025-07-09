@@ -40,9 +40,9 @@ class Request:
         predicted_class = -1
 
         if prediction.item() < 0.5:
-            predicted_class = 0 #class1
+            predicted_class = 0 # class1
         else:
-            predicted_class = 1 #class2
+            predicted_class = 1 # class2
 
         self.result = predicted_class
 
