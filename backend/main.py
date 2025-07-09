@@ -1,6 +1,7 @@
 import torch 
 import torch.nn as nn
 import uvicorn
+import os
 
 from fastapi import FastAPI, UploadFile, HTTPException, File, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -46,6 +47,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+if not os.path.exists("images/"):
+    os.mkdir("images")
 
 @app.post("/predict/")
 async def predict(name: str = Form(...), img: UploadFile = File(...)):

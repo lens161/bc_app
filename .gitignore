@@ -3,6 +3,8 @@
 
 ### Local Files ###
 backend/bcapp/
+backend/models/
+backend/images/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
