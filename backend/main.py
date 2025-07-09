@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import uvicorn
 
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, HTTPException, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from torchvision import models
@@ -25,11 +25,15 @@ def load_model(model_path):
     model.eval()
     return model
 
+model = load_model("path")
+
 app = FastAPI(debug=True)
 
 origins = [
     "http://loacalhost:3000"
 ]
+
+requests = List[Request]
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,3 +42,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/predict/")
+async def predict(name: str = Form(...), img: UploadFile = File(...)):
+
+    if img.content_type not in ["image/jpg", "image/png"]:
+        raise HTTPException(status_code=400, detail="wrong image")
+
+    image_file = await img.read()
+
+    path = f"images/{img.filename}"
+
+    with open(path, "wb") as f:
+        f.write(image_file)
+
+    request = Request(model, path)
+    

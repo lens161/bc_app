@@ -6,17 +6,17 @@ from torchvision import models, transforms
 from torchvision.io import read_image
 
 class Request:
-    def __init__(self, model, image_tensor):
-        self.model = model
-        self.image_tensor = image_tensor
-        self.image = None
-        self.result = -1 # class 1 = 0, class 2 = 1, no result = -1 
+    def __init__(self, model, image_path):
         self.timestamp = datetime.datetime.now()
+        self.model = model
+        self.image_path = image_path
+        self.image_tensor = self.image_to_tensor()
+        self.result = -1 # class 1 = 0, class 2 = 1, no result = -1 
     
     def __str__(self):
         return f"{self.timestamp} - ({self.result})"
 
-    def image_to_tensor(self, image_path):
+    def image_to_tensor(self):
         transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ConvertImageDtype(torch.float32),
@@ -24,20 +24,18 @@ class Request:
                                 std=[0.229, 0.224, 0.225])
         ])
         
-        image = read_image(image_path)
+        image = read_image(self.image_path)
         image = transform(image)
         image = image.unsqueeze(0)
 
-        self.image = image
-        
         return image
     
-    def forward(self, image_tensor):
+    def forward(self):
         device = next(self.model.parameters()).device
-        image_tensor = image_tensor.to(device)
+        self.image_tensor = self.image_tensor.to(device)
 
         with torch.no_grad():
-            prediction = torch.sigmoid(self.model(image_tensor))
+            prediction = torch.sigmoid(self.model(self.image_tensor))
 
         predicted_class = -1
 
