@@ -17,6 +17,7 @@ class Request:
         return f"{self.timestamp} - ({self.result})"
 
     def image_to_tensor(self):
+        # transform normalisation settings are based on resnet18 pretrained model.
         transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ConvertImageDtype(torch.float32),

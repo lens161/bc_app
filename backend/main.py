@@ -33,12 +33,12 @@ model = load_model(f"models/archive.pt")
 
 app = FastAPI(debug=True)
 
+requests: List[Request] = [] # save requests in memory while program is running. no idea why, its just there...
+# TODO: add get function to retrieve list of requests issued so far including their results. dont know why I need this. could be useful later...
+
 origins = [
     "http://loacalhost:3000"
 ]
-
-requests: List[Request] = [] # save requests in memory while program is running. no idea why, its just there...
-# TODO: add get function to retrieve list of requests issued so far including their results. dont know why I need this. could be useful later...
 
 app.add_middleware(
     CORSMiddleware,
