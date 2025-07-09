@@ -37,6 +37,7 @@ origins = [
 ]
 
 requests: List[Request] = [] # save requests in memory while program is running. no idea why, its just there...
+# TODO: add get function to retrieve list of requests issued so far including their results. dont know why I need this. could be useful later...
 
 app.add_middleware(
     CORSMiddleware,
@@ -45,6 +46,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 @app.post("/predict/")
 async def predict(name: str = Form(...), img: UploadFile = File(...)):
 
