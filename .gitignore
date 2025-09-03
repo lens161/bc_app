@@ -5,6 +5,7 @@
 backend/bcapp/
 backend/models/
 backend/images/
+backend/testimages/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
